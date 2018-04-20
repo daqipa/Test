@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.test.dao.UserDao">
+    <select id="readTotal" resultType="int">
+        select count(id) from user
+    </select>
+    <!--分页查询;resultType:指定结果的类型;parameterType:指定存储参数的类型-->
+    <select id="fenye" resultType="com.test.entity.User" parameterType="map">
+        select * from user limit #{start},#{size}
+    </select>
+</mapper>

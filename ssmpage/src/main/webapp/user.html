@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="static/css/easyui.css"/>
+    <link rel="stylesheet" href="static/css/icon.css"/>
+    <script src="static/js/jquery.js"></script>
+    <script src="static/js/easyui.js"></script>
+    <script>
+        var totalSize=0;
+        function readTotal() {
+            $.get("readTotal.form",function (size) {
+                totalSize=eval(size);
+            });
+        }
+        readTotal();
+        function init() {
+             $("#first").datagrid({
+                 pagination:true,//分页组件
+                 columns:[[
+                     {field:"id",title:"id",width:100},
+                     {field:"name",title:"账号",width:100}
+                 ]]
+             });
+             fillData(1,2);
+        }
+        $(init);
+       
+        function fillData(page,size) {
+            //异步发送请求到controler的fenye()方法，该方法返回数据给data;
+            //自动发返回的string转为json对象
+           $.getJSON("fenye/"+page+"/"+size+".form",function (data) {
+               //将返回的数据填充进列表
+               $("#first").datagrid("loadData",data);
+               //获取分页组件
+               var pager=$("#first").datagrid("getPager");
+               //设置分页参数
+               pager.pagination({
+                   total:totalSize,  //总条数
+                   pageList:[1,2,10],//尺寸范围
+                   pageSize:size,    //每页显示的条数
+                   pageNumber:page,  //当前页
+                   onSelectPage:function (page,size) {
+                       //翻页调用的函数
+                            fillData(page,size);
+                   }
+               });
+           });
+        }
+    </script>
+</head>
+<body>
+    <div id="first"></div>
+</body>
+</html>
