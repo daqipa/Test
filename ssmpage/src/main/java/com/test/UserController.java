@@ -25,4 +25,3 @@ public class UserController {
           return us.fenye(page,size);
     }
 }
-
